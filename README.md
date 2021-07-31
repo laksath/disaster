@@ -16,5 +16,5 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-Note : please run with no-sound-null-safety (auto_size_text package requires it!).
+Note : Run with no-sound-null-safety (auto_size_text package requires it!).
 
