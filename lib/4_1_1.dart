@@ -1,17 +1,59 @@
+import 'dart:io';
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:disaster_prevention/models/inventory_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import 'models/inventory_coord.dart';
 
 class Four11 extends StatefulWidget {
+  final Box<InventoryImage> img;
+  final Box<InventoryCoord> coord;
+  const Four11(this.img, this.coord);
   @override
   _Four11State createState() => _Four11State();
 }
 
 class _Four11State extends State<Four11> {
+  late File _image;
+  late String linkImg;
+  final picker = ImagePicker();
+  int check = 0;
+//Image Picker function to get image from gallery
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        linkImg = pickedFile.path;
+        check = 1;
+      }
+    });
+  }
+
+//Image Picker function to get image from camera
+  Future getImageFromCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        check = 1;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _ht = MediaQuery.of(context).size.height;
     final _wd = MediaQuery.of(context).size.width;
     final _topPadding = MediaQuery.of(context).padding.top;
     final _total = _ht - _topPadding;
+
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(
@@ -50,11 +92,83 @@ class _Four11State extends State<Four11> {
                 style: TextStyle(fontSize: 35),
               ),
             ),
-            Image.asset(
-              'images/4_1_1.jpg',
+            Container(
+              height: _total * 0.45,
               width: _wd * 0.9,
-              // height: 240.0,
-              // fit: BoxFit.,
+              child: check == 0
+                  ? AutoSizeText(
+                      'No image selected Yet!',
+                      style: TextStyle(fontSize: 45),
+                      maxLines: 2,
+                    )
+                  : Image.file(
+                      _image,
+                      fit: BoxFit.contain,
+                    ),
+            ),
+            Container(
+              height: _total * 0.05,
+            ),
+            Row(
+              children: [
+                Container(
+                  height: _total * 0.1,
+                  width: _wd * 0.4,
+                  child: ElevatedButton(
+                    child: AutoSizeText(
+                      'Import from Gallery',
+                      style: TextStyle(fontSize: 25),
+                      maxLines: 2,
+                    ),
+                    onPressed: getImageFromGallery,
+                  ),
+                ),
+                Container(
+                  width: _wd * 0.1,
+                ),
+                Container(
+                  height: _total * 0.1,
+                  width: _wd * 0.4,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Colors.green,
+                      ),
+                    ),
+                    child: AutoSizeText(
+                      'Save Map',
+                      style: TextStyle(fontSize: 25),
+                      maxLines: 2,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 2), () {
+                            Navigator.of(context).pop(true);
+                          });
+                          return AlertDialog(
+                            title: check == 0
+                                ? Text("Please Choose an Image")
+                                : Text('Image Saved'),
+                          );
+                        },
+                      );
+                      if (check == 1) {
+                        print(linkImg);
+
+                        widget.img.add(
+                          InventoryImage(link: linkImg),
+                        );
+
+                        print(widget.img.toMap());
+                        print(widget.img.length);
+                        // saveMap(_image);
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -8,13 +8,14 @@ android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
    <application
         android:label="disaster_prevention"
-        android:icon="@mipmap/ic_launcher">
-
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
+<!--For camera acess! -->
         
         <!--API ADDED HERE! -->
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyA5z0z93Qgi4KQy78_Zir3NqzkAP6exPyM"/>
-
+        
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

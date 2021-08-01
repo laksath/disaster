@@ -1,11 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:disaster_prevention/4_1_2.dart';
+import 'package:disaster_prevention/models/inventory_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '4_1_1.dart';
 import '4_1_3.dart';
+import 'models/inventory_coord.dart';
 
 class Four1 extends StatefulWidget {
+  final Box<InventoryImage> img;
+  final Box<InventoryCoord> coord;
+  const Four1(this.img, this.coord);
+
   @override
   _Four1State createState() => _Four1State();
 }
@@ -51,7 +58,7 @@ class _Four1State extends State<Four1> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Four11(),
+                      builder: (context) => Four11(widget.img, widget.coord),
                     ),
                   );
                 },
