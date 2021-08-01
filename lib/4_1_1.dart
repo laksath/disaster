@@ -144,7 +144,7 @@ class _Four11State extends State<Four11> {
                       int copyVerify = 0;
                       if (check == 1) {
                         for (var i = 0; i < widget.img.length; i++) {
-                          if (widget.img.getAt(i)?.link == null &&
+                          if (widget.img.getAt(i)?.link != null &&
                               linkImg == widget.img.getAt(i)!.link) {
                             copyVerify = 1;
                           }
