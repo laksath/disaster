@@ -141,30 +141,33 @@ class _Four11State extends State<Four11> {
                       maxLines: 2,
                     ),
                     onPressed: () {
+                      int copyVerify = 0;
+                      if (check == 1) {
+                        for (var i = 0; i < widget.img.length; i++) {
+                          if (widget.img.getAt(i)?.link == null &&
+                              linkImg == widget.img.getAt(i)!.link) {
+                            copyVerify = 1;
+                          }
+                        }
+                        widget.img.add(
+                          InventoryImage(link: linkImg),
+                        );
+                      }
                       showDialog(
                         context: context,
                         builder: (context) {
-                          Future.delayed(Duration(seconds: 2), () {
+                          Future.delayed(Duration(seconds: 1), () {
                             Navigator.of(context).pop(true);
                           });
                           return AlertDialog(
                             title: check == 0
                                 ? Text("Please Choose an Image")
-                                : Text('Image Saved'),
+                                : copyVerify == 0
+                                    ? Text('Please Choose a new Image')
+                                    : Text('Image Saved'),
                           );
                         },
                       );
-                      if (check == 1) {
-                        print(linkImg);
-
-                        widget.img.add(
-                          InventoryImage(link: linkImg),
-                        );
-
-                        print(widget.img.toMap());
-                        print(widget.img.length);
-                        // saveMap(_image);
-                      }
                     },
                   ),
                 ),
