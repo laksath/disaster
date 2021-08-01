@@ -1,16 +1,13 @@
-// import 'dart:io';
 import 'package:disaster_prevention/models/inventory_coord.dart';
 import 'package:disaster_prevention/models/inventory_image.dart';
-// import 'package:disaster_prevention/models/inventory_info.dart';
 import 'package:hive/hive.dart';
-// import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:disaster_prevention/4_1.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:provider/provider.dart';
-
 import '4_2.dart';
+import '4_3.dart';
+import 'models/inventory_2_coord.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +16,11 @@ Future<void> main() async {
 
   Hive.registerAdapter<InventoryImage>(InventoryImageAdapter());
   Hive.registerAdapter<InventoryCoord>(InventoryCoordAdapter());
-  // Hive.registerAdapter<InventoryInfo>(InventoryInfoAdapter());
+  Hive.registerAdapter<Inventory2Coord>(Inventory2CoordAdapter());
+
   await Future.wait([Hive.openBox<InventoryImage>('inventory')]);
   await Future.wait([Hive.openBox<InventoryCoord>('coord')]);
-  // await Future.wait([Hive.openBox<InventoryInfo>('info')]);
+  await Future.wait([Hive.openBox<Inventory2Coord>('coord2')]);
 
   runApp(MyApp());
 }
@@ -66,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final Box<InventoryImage> img = Hive.box('inventory');
-    print(img.length);
     final Box<InventoryCoord> coord = Hive.box('coord');
-    // final Box<InventoryInfo> info = Hive.box('info');
+    final Box<Inventory2Coord> coord2 = Hive.box('coord2');
+
     final _ht = MediaQuery.of(context).size.height;
     final _wd = MediaQuery.of(context).size.width;
     final _topPadding = MediaQuery.of(context).padding.top;
@@ -172,7 +170,12 @@ class _MyHomePageState extends State<MyHomePage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Four3(img, coord2),
+                    ),
+                  );
                 },
                 child: FittedBox(
                   child: AutoSizeText(
@@ -199,9 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 75,
         width: 75,
         child: FloatingActionButton(
-          onPressed: () {
-            // Navigator.pop(c  ontext);
-          },
+          onPressed: () {},
           child: Icon(
             Icons.arrow_back_ios_new,
             color: Colors.black,
